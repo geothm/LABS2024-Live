@@ -2,12 +2,10 @@ package ro.irian.labs;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
 @ComponentScan(basePackages = "ro.irian.labs") // Replace with your package
 public class WebConfig implements WebMvcConfigurer {
 

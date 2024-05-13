@@ -1,5 +1,5 @@
 --00--
-1.What are the responsabilities of an application backend?
+1.What are the responsibilities of an application backend?
 
 - Database Management: This includes storing, retrieving, updating, and deleting data. Backend systems ensure data integrity and consistency across the application.
 - Application Logic: Much of an application's core functionality, such as calculations, business rule processing, and decision making, is implemented on the backend. This logic dictates how data is created, stored, and changed.

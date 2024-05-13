@@ -1,0 +1,71 @@
+--00--
+1.What are the responsabilities of an application backend?
+
+- Database Management: This includes storing, retrieving, updating, and deleting data. Backend systems ensure data integrity and consistency across the application.
+- Application Logic: Much of an application's core functionality, such as calculations, business rule processing, and decision making, is implemented on the backend. This logic dictates how data is created, stored, and changed.
+- User Authentication and Authorization: The backend handles logins, user validation, and ensures that users have appropriate permissions to access and manipulate data and functionalities.
+- API Management: The backend often includes an API layer that facilitates communication between the client-side of the application and the server-side. This includes routing requests, handling responses, and managing API security.
+- Performance Optimization: Backends are optimized for performance, managing memory use, data retrieval times, and load balancing across servers to ensure the application runs smoothly.
+- Security Measures: Beyond authentication and authorization, the backend is responsible for data encryption, protecting against vulnerabilities like SQL injection, cross-site scripting (XSS), and other malicious attacks.
+- Data Integration: The backend integrates with other services or systems, whether internal databases, third-party services like payment gateways, or other data providers, ensuring seamless data flow across platforms.
+- Session Management: Managing user sessions from login to logout. This includes keeping the user’s state across multiple requests which is essential for systems that require user login.
+- Error Handling and Logging: The backend often manages error handling, which includes detecting, logging, and responding to error conditions. This also helps in debugging issues and auditing activity.
+- Backup and Recovery: Ensuring data is regularly backed up and can be restored in case of a system failure is another crucial backend task.
+- Notification Services: Handling the sending of emails, SMS messages, or other forms of notifications to users as part of the application process.
+- Scalability Management: Backend systems are designed to efficiently scale up or down based on application demand to handle varying loads without impacting user experience.
+
+How do we get there? What do we need?
+2. A server that listens for requests from clients (clients are applications eg Anglar/Java/Android apps, users are people)
+	- Common examples include: Tomcat, Undertow, Jetty
+	- Tomcat is a web server and servlet container that delivers web content to your browser
+		- it can run standalone or be embedded in a Java application
+3. A servlet
+	- a Java program that extends the capabilities of servers
+	- Servlets handle client requests
+	- After processing a request, a servlet generates a response, typically in HTML format, but it could also be XML, JSON, or binary data.
+	- The Servlet API is a standard set of programming interfaces provided by Java for writing servlets
+	- Eg try this promt in ChatGPT: please give me an example of a pure java (no framework) servlet that has a get method to return a list of customers
+
+4. A framework
+	- While the Servlet API is powerful for handling HTTP requests and managing sessions, it often requires a lot of boilerplate code and manual configuration
+	- Spring provides a comprehensive programming and configuration model that simplifies many tasks that are complex and tedious with just servlets
+		- Dependency Injection (DI): Spring's DI mechanism allows for easy wiring of dependencies between different components (beans), reducing coupling and increasing modularity.
+		- Aspect-Oriented Programming (AOP): Spring supports AOP for separating cross-cutting concerns (like transaction management or logging) from the business logic.
+		- handles much of the repetitive code that developers would otherwise need to write
+
+5. Spring MVC
+	- a powerful and highly customizable module for building web applications
+	- adheres to the Model-View-Controller (MVC) design pattern, which helps in building well-structured, maintainable applications
+	- DispatcherServlet is the core component that manages the web application flow in Spring MVC
+		- acts as the "front controller" for Spring's web applications and is responsible for orchestrating the entire request handling process
+		- all HTTP requests to the application are routed through the DispatcherServlet, which delegates them to the appropriate handlers
+	- Model: Represents the data and the business rules of the application. It is responsible for managing the data, logic, and rules of the application.
+	- View: Responsible for rendering the Model data and generally corresponds to user interface components like HTML or XML.
+	- Controller: Acts as an intermediary between the Model and the View. It processes user requests, manipulates data through the Model, and interacts with Views to render the final output.
+
+6. A build tool
+	- Maven: primarily used for building and managing any Java-based project
+		- Project Object Model (POM): At the heart of Maven's functionality is the Project Object Model (POM), which is defined in an XML file (pom.xml). This file contains information about the project, configuration details, the project's dependencies, and other elements necessary for building the project effectively.
+		- Dependencies and Repositories: Maven automatically handles project dependencies. Developers list their required libraries in the pom.xml file, and Maven manages the downloading, updating, and storing of these libraries in a local repository. It also supports using remote repositories to fetch dependencies.
+		- Build Lifecycle: Maven is based on the concept of a build lifecycle which includes phases like compile, test, and package. This allows the automation of the software building process. For instance, Maven compiles source code, runs tests, and packages the binary code in a distributable format like a JAR or WAR file, often with no additional configuration needed beyond the pom.xml file.
+		- Plugins and Goals: Maven is extensible via plugins. Each plugin can have one or more goals (tasks) it can perform. For example, a Java compiler plugin has a goal to compile Java sources. When you run Maven, you specify a phase, and Maven executes every goal in that phase and all phases leading up to it.
+
+Ex 00: Example plain Java app
+	 - open a new Maven project in Intellij
+	 - add tomcat dependency
+	 - configure and start and embedded Tomcat server
+	 - add spring dependencies
+	 - register dispatcher servlet
+	 - add spring configs
+		- (@Configuration, @EnableWebMvc, @ComponentScan) :
+	 - add controller with business logic
+		- @RestController (@GetMapping) :
+
+--01--02--
+1. Spring boot
+2. spring-boot-starter-web
+
+	Ex 01: Spring Boot Example
+		- create Spring Boot app from initilizr
+		- write HelloWorld RestController
+			- (@RequestMapping, @PathVariable, @RequestParam):

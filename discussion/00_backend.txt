@@ -53,7 +53,7 @@ How do we get there? What do we need?
 Ex 00: Example plain Java app
 	 - open a new Maven project in Intellij
 	 - add tomcat dependency
-	 - configure and start and embedded Tomcat server
+	 - configure and start an embedded Tomcat server
 	 - add spring dependencies
 	 - register dispatcher servlet
 	 - add spring configs
@@ -69,3 +69,8 @@ Ex 00: Example plain Java app
 		- create Spring Boot app from initilizr
 		- write HelloWorld RestController
 			- (@RequestMapping, @PathVariable, @RequestParam):
+
+	Ex 02: PizzaController
+    		- get all pizzas
+    		- get pizza by full name exactly,
+    		- get pizza by name contains

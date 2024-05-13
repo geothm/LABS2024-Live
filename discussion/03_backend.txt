@@ -1,0 +1,120 @@
+--03--04--
+1. Spring DI
+2. Spring beans	- lifecyle, scopes
+2.1.Spring Bean Scopes
+Spring defines several bean scopes that determine the lifecycle and visibility of a bean within the application contexts:
+
+Singleton: The default scope. Only one instance of the bean is created and shared across all requests for that bean.
+Prototype: A new instance is created each time a bean is requested.
+Request: A single instance is created for each HTTP request; only applicable in web-aware Spring ApplicationContext.
+Session: A single instance is created for each HTTP session; only applicable in web-aware Spring ApplicationContext.
+Global Session: A single instance per global HTTP session; typically only valid when using a portlet context.
+Application: A single instance per the lifecycle of a ServletContext; only applicable in a web environment.
+WebSocket: A single instance for the lifecycle of a WebSocket; applicable only in web environments.
+
+2.2 Spring Bean Lifecycle
+The lifecycle of a Spring bean is managed by the Spring IoC (Inversion of Control) container and includes several stages from creation to destruction:
+
+Instantiation: The Spring container creates an instance of the bean.
+Populating Properties: The container injects the bean's properties as specified in the Spring configuration file or annotations.
+Bean Name Awareness: If the bean implements the BeanNameAware interface, Spring passes the bean’s ID to the setBeanName method.
+Bean Factory Awareness: If the bean implements the BeanFactoryAware interface, the setBeanFactory method is called, providing a reference to the bean factory that created it.
+Pre-Initialization (BeanPostProcessors): Before the bean is fully initialized, any BeanPostProcessor associated with the bean is called.
+InitializingBean & Custom Init Method: If the bean implements InitializingBean, its afterPropertiesSet method is executed. Additionally, if a custom init method is defined, it is also called.
+Post-Initialization (BeanPostProcessors): After the bean is initialized, any BeanPostProcessor is called again.
+Ready to Use: At this point, the bean is fully created and ready to be used by the application.
+Destruction: If the bean scope is a singleton, it will be destroyed when the Spring container shuts down. If the bean implements the DisposableBean interface, the destroy method is executed. Similarly, any custom destroy method defined in the bean configuration is called.
+
+In the Spring framework, @PostConstruct and @PreDestroy annotations provide a way to define methods that get executed after a bean is initialized and before a bean is destroyed, respectively. These annotations are part of the Java EE specification and are supported in Spring as well.
+
+@PostConstruct
+The @PostConstruct annotation is used on a method that needs to be executed after dependency injection is complete to perform any initialization. This method is called only once, just after the instantiation and configuration of the bean. Here are key points about @PostConstruct:
+
+Execution Time: It is executed after the bean is constructed with new, its dependencies are injected, and the Spring-specific lifecycle methods like setBeanName, setApplicationContext, etc., have been called.
+Usage: Common uses of @PostConstruct include initializing database connections, reading configuration files, or starting up tasks that should only run once the bean is fully initialized.
+Method Restrictions: The method annotated with @PostConstruct:
+Must not have any parameters.
+Must return void.
+Should not throw checked exceptions.
+Can be of any access type (public, protected, package-private, or private).
+
+@PreDestroy
+The @PreDestroy annotation is used on a method that is executed just before the bean is removed from the container and destroyed. This method is called once at the end of the bean lifecycle when the application context is being shut down or the bean is being removed due to scope ending. Here’s more about @PreDestroy:
+
+Execution Time: It is executed before the bean is actually destroyed, either due to the shutdown of the application context or because its scope has ended.
+Usage: It's typically used for cleanup activities like closing database connections, releasing resources, or stopping scheduled tasks.
+Method Restrictions: The method annotated with @PreDestroy:
+Must not have any parameters.
+Must return void.
+Should not throw checked exceptions.
+Can be of any access type (public, protected, package-private, or private).
+
+Considerations
+While @PostConstruct and @PreDestroy are part of the Java EE and Jakarta EE standards, they require the javax.annotation-api dependency in your project.
+In Spring, you can alternatively use the InitializingBean and DisposableBean interfaces or specify custom init-method and destroy-method settings in your bean definitions as an alternative to these annotations.
+These annotations are particularly useful for ensuring that beans go through proper lifecycle handling, allowing for both robust initialization and clean shutdown processes.
+
+
+
+
+
+
+
+Dependency Injection (DI) is a fundamental concept in the Spring Framework, facilitating the design of loosely coupled applications. It's a technique in which an object receives other objects that it depends on, called dependencies. Instead of objects having to construct their dependencies themselves or use service locators, dependency injection handles the object creation and its association with other objects.
+
+Core Principles of Dependency Injection
+The main idea behind DI is to separate the creation of an object's dependencies from its own behavior, which leads to:
+
+Decoupled Code: Objects do not need to know how their dependencies are created or managed.
+Easier Maintainability: Reducing dependency on concrete implementations makes the system easier to understand, modify, and test.
+Enhanced Testability: By injecting dependencies, you can easily replace them with mocks or stubs during testing.
+Types of Dependency Injection in Spring
+Spring supports three primary modes of dependency injection:
+
+Constructor Injection:
+
+Dependencies are provided through class constructors.
+This is the most common type of DI in Spring and is preferred because it allows the injected components to be immutable and ensures that dependency resolution is completed before the bean is actually used.
+
+Setter Injection:
+
+Dependencies are set on objects through JavaBean-style setter methods.
+This method is preferred when optional dependencies are involved, or when circular dependencies need to be resolved.
+
+Field Injection:
+
+Dependencies are injected directly into the class fields.
+While convenient, it's generally discouraged except for mandatory dependencies in certain situations like tests or when circular dependencies cannot be avoided.
+
+How Spring Manages Dependencies
+The Spring IoC (Inversion of Control) container manages Java objects – from instantiation to destruction through its Bean lifecycle. Beans are defined in Spring's configuration (XML, Annotations, or Java Config) and are instantiated by the container. Dependencies are then injected by Spring as defined by the @Autowired, @Resource, or @Inject annotations.
+
+Advantages of Using Spring for DI
+Flexibility: Spring's advanced container capabilities offer various options for dependency injection and bean lifecycle management.
+Integration: Easily integrates with various databases, ORM, logging frameworks, and other enterprise services.
+Modularity: Promotes modular architecture by encouraging the separation of responsibilities through dependency injection.
+Configuration and Customization: Offers various ways to configure beans and dependencies tailored to specific requirements, including profiles and conditional beans.
+In essence, Dependency Injection in Spring is a powerful mechanism to achieve decoupling and facilitate easier management, testing, and maintenance of applications.
+
+In Spring Framework, the @Primary annotation is used to give a higher preference to a bean when multiple candidates are qualified to autowire a single-valued dependency. This is especially useful when configuring your Spring application context, where you may have more than one bean of the same type and you need to specify which bean should be considered as the default bean for autowiring.
+
+Purpose of @Primary
+The @Primary annotation helps in scenarios where you have defined multiple beans of the same type and Spring needs to know which bean to inject where no further qualification (like @Qualifier) is specified. It essentially tells the Spring container to give preference to the annotated bean when multiple beans exist for a single dependency.
+
+Considerations
+Usage with @Qualifier: If both @Primary and @Qualifier annotations are used on different beans or on the same injection point, @Qualifier takes precedence. This allows for overriding the primary designation if specific wiring is required.
+Best Practices: It's often a good practice to use @Primary sparingly, as its extensive use across a large Spring application can lead to confusion about which beans are being injected where. For more explicit control, using @Qualifier is generally preferred.
+Scope: The @Primary annotation can be used with any bean managed by the Spring container, regardless of how it is defined (via Java Config, annotations, or XML configuration).
+Using @Primary effectively reduces ambiguity and simplifies the configuration when autowiring beans in your Spring applications, making it clear which bean should be chosen in the presence of multiple candidates.
+
+Ex 03: Spring DI and Service example
+		- create Pizza class
+		- Pizza service
+		- move b.l. into service
+		- inject PizzaService in Controller
+
+	Ex 04: Multiple/list injection
+		- pizza service interface
+		- 2 implementations
+		- inject list in controller
+		- inject primary service

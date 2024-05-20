@@ -1,9 +1,10 @@
 package ro.irian.labs2024.pizza.service;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.irian.labs2024.pizza.domain.Pizza;
+import ro.irian.labs2024.pizza.domain.PizzaRepository;
 import ro.irian.labs2024.pizza.domain.PizzaService;
 
 import java.util.List;
@@ -12,34 +13,34 @@ import java.util.List;
 @Primary
 public class ItalianPizzaService implements PizzaService {
 
+    private final PizzaRepository pizzaRepository;
+
     private List<Pizza> pizzas;
 
-    @PostConstruct
-    private void init(){
-        pizzas = List.of(
-                new Pizza(1L, "Salami"),
-                new Pizza(2L, "Prosciutto"),
-                new Pizza(3L, "Capriciosa")
-        );
+    public ItalianPizzaService(PizzaRepository pizzaRepository) {
+        this.pizzaRepository = pizzaRepository;
+    }
+
+    @Transactional
+    @Override
+    public void savePizzas(){
+        pizzaRepository.save(new Pizza(null, "Salami"));
+        pizzaRepository.save(new Pizza(null, "Prosciutto"));
+        pizzaRepository.save(new Pizza(null, "Capriciosa"));
     }
 
     @Override
     public List<Pizza> getAllPizzas(){
-        return pizzas;
+        return pizzaRepository.findAll();
     }
 
     @Override
     public Pizza getPizzaById(Long id){
-        return pizzas.stream()
-                .filter(pizza -> pizza.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return pizzaRepository.findById(id);
     }
 
     @Override
     public List<Pizza> getPizzaByNameContains(String nameContainsString){
-        return pizzas.stream()
-                .filter(pizza -> pizza.nameContains(nameContainsString))
-                .toList();
+        return pizzaRepository.findNameContains(nameContainsString);
     }
 }

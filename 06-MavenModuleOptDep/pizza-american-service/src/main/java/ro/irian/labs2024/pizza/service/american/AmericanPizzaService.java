@@ -14,6 +14,11 @@ public class AmericanPizzaService implements PizzaService {
 
     @PostConstruct
     private void init(){
+        savePizzas();
+    }
+
+    @Override
+    public void savePizzas() {
         pizzas = List.of(
                 new Pizza(4L, "Pepperoni"),
                 new Pizza(5L, "Hawaiian"),

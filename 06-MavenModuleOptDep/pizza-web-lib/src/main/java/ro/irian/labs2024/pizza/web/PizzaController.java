@@ -1,5 +1,6 @@
 package ro.irian.labs2024.pizza.web;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.*;
 import ro.irian.labs2024.pizza.domain.Pizza;
 import ro.irian.labs2024.pizza.domain.PizzaService;
@@ -18,6 +19,11 @@ public class PizzaController {
                            PizzaService fastPizzaService) {
         this.pizzaService = pizzaService;
         this.fastPizzaService = fastPizzaService;
+    }
+
+    @PostConstruct
+    private void init() {
+        fastPizzaService.savePizzas();
     }
 
     @GetMapping()

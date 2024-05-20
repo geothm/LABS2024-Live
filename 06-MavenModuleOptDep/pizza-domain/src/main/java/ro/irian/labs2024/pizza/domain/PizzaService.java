@@ -1,10 +1,10 @@
 package ro.irian.labs2024.pizza.domain;
 
-import ro.irian.labs2024.pizza.domain.Pizza;
-
 import java.util.List;
 
 public interface PizzaService {
+    void savePizzas();
+
     List<Pizza> getAllPizzas();
 
     Pizza getPizzaById(Long id);

@@ -1,12 +1,25 @@
 package ro.irian.labs2024.pizza.domain;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Entity
+@Table(name = "pizza")
 public class Pizza {
 
-    private final Long id;
-    private final String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private  Long id;
 
+    @Version
+    private Long version;
+
+    @Column(name = "name", length = 50, nullable = false)
+    private  String name;
+
+    public Pizza() {
+    }
 
     public Pizza(Long id, String name) {
         this.id = id;
@@ -45,5 +58,9 @@ public class Pizza {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    public boolean isTransient() {
+        return version == null;
     }
 }

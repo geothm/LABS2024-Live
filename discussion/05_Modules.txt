@@ -1,0 +1,138 @@
+--05--06--
+
+1. Layered Architecture 
+
+Layered architecture is a design approach in software engineering that organizes the system into distinct layers, each with specific responsibilities. This structure is meant to simplify development, enhance maintainability, and allow for scalable solutions. 
+
+Layers in Layered Architecture
+
+	- Presentation Layer (User Interface Layer):
+		- Purpose: Interacts with the user.
+		- Responsibilities: Displays information to the user and interprets user commands.
+		- Examples: Web pages, desktop applications, mobile apps.
+	----------------> Angular/React etc	
+	
+	- Application Layer (Service Layer):
+		- Purpose: Coordinates application activities.
+		- Responsibilities: Handles business logic and ensures proper execution of tasks.
+		- Examples: Controllers, services, and business logic components.
+		
+	- Business Logic Layer (Domain Layer):
+		- Purpose: Encapsulates core business rules.
+		- Responsibilities: Manages domain logic, calculations, and data transformations.
+		- Examples: Domain models, business rules, algorithms.
+
+	- Data Access Layer:
+		- Purpose: Manages data retrieval and storage.
+		- Responsibilities: Handles database interactions, data access objects (DAOs), and repositories.
+		- Examples: SQL queries, ORM frameworks, data mappers.
+	----------------> Java
+		
+	- Database Layer:
+		- Purpose: Stores the data.
+		- Responsibilities: Maintains data integrity and handles data storage operations.
+		- Examples: SQL databases, NoSQL databases, file systems.
+	----------------> Postgres, MariaDB, MongoDB etc
+		
+Key Benefits
+
+	- Separation of Concerns: Each layer has a distinct responsibility, making the system easier to understand and manage.
+	- Maintainability: Modifications in one layer typically have minimal impact on others, simplifying updates and bug fixes.
+	- Scalability: Layers can be scaled independently based on their specific load and performance requirements.
+	- Reusability: Layers, especially the business logic and data access layers, can be reused across different projects or components.
+	- Testability: Layers can be tested in isolation, improving the robustness of unit tests.
+	
+Common Practices
+
+	- Layer Communication: Layers should interact with each other through well-defined interfaces. Typically, the higher layers call functions or services in the lower layers.
+	- Encapsulation: Each layer should hide its internal details and expose only what is necessary for other layers to interact with it.
+	- Dependency Management: Dependencies between layers should be minimized and managed through dependency injection or similar patterns.
+	
+Example (e-commerce application)
+
+	- Presentation Layer: The web interface where users browse products and place orders.
+	-------------------------------------------------------------------------------------------------------------------------
+	- Application Layer: The services that handle operations like adding items to the cart and processing payments.
+	- Business Logic Layer: Rules for discounts, inventory checks, and calculating totals.
+	- Data Access Layer: Interactions with the database to fetch product details, user information, and order history.
+	--------------------------------------------------------------------------------------------------------------------------
+	- Database Layer: The actual database storing all the product, user, and order data.
+
+
+2. Maven Modules
+
+Maven modules are an essential feature of Apache Maven, a build automation tool used primarily for Java projects. A Maven module is a project that is part of a larger multi-module project. This structure allows for a more organized and maintainable approach to complex projects. 
+
+Parent POM:
+
+	- Purpose: Defines the common configuration for the entire multi-module project.
+	- Structure: Contains settings, properties, dependency management, and build configurations that are inherited by child modules.
+	- Example
+	
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>parent-project</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>module-a</module>
+        <module>module-b</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
+
+
+Child Modules:
+	- Purpose: Individual projects that inherit from the parent POM.
+	- Structure: Each module has its own pom.xml but inherits configurations from the parent POM.
+	- Example
+	
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>parent-project</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>module-a</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>module-b</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
+
+
+Benefits of Maven Modules
+
+	- Reusability: Modules can be reused across different projects or applications.
+	- Separation of Concerns: Each module can focus on a specific aspect or feature of the project, leading to better organization.
+	- Parallel Development: Different teams can work on different modules simultaneously without interfering with each other.
+	- Dependency Management: Common dependencies and configurations can be managed in the parent POM, reducing redundancy and ensuring consistency.
+	
+Ex 05
+	- Create child modules for Domaine, Service , Web lib and Web and extract classes
+	- Add necessary deps between modules
+	- Create Web module to run the Spring boot app and include the web lib dep
+
+Ex 06 
+	- Extract AmericanPizzaService to different module
+	- Extract interface to api module
+	- Remove impl module dependency from web lib
+	- Remove the american-pizza-service module dependency  from Web module and test which PizzaServices are injected in controller
+
+	

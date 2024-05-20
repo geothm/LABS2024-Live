@@ -1,0 +1,344 @@
+--07--08--
+JPA, Hibernate, EntityManager, Transactional
+
+A. Relational databases
+
+1. Tables (Relations):
+	- Structure: Data is organized into tables, which are also known as relations. Each table consists of rows and columns, where columns represent data fields and rows represent records.
+	- Schema: The structure of a table is defined by its schema, which includes the table name, column names, and data types for each column.
+
+2. Rows (Records) and Columns (Fields):
+	- Rows: Each row in a table represents a single record, which is a unique instance of the data.
+	- Columns: Each column in a table represents a data field, and all data in a column adheres to a specific data type (e.g., integer, string, date).
+
+3. Primary Key:
+	- A primary key is a unique identifier for each row in a table. It ensures that each record can be uniquely identified. Primary keys are crucial for establishing relationships between tables.
+
+4. Foreign Key:
+	- A foreign key is a column or a set of columns in one table that uniquely identifies a row in another table. It establishes a link between the data in the two tables.
+
+5. Relationships:
+	- One-to-One: A single row in one table is linked to a single row in another table.
+	- One-to-Many: A single row in one table can be linked to multiple rows in another table.
+	- Many-to-Many: Multiple rows in one table can be linked to multiple rows in another table. This is typically managed through a junction table.
+
+6. SQL (Structured Query Language):
+	- SQL is the standard language used to interact with relational databases. It includes commands for querying, inserting, updating, and deleting data.
+		- SELECT: Retrieve data from one or more tables.
+		- INSERT: Add new data into a table.
+		- UPDATE: Modify existing data within a table.
+		- DELETE: Remove data from a table.
+		- JOIN: Combine rows from two or more tables based on a related column.
+
+7. ACID Properties:
+	- Atomicity: Ensures that each transaction is treated as a single unit, which either completely succeeds or completely fails.
+	- Consistency: Ensures that a transaction can only bring the database from one valid state to another, maintaining database rules.
+	- Isolation: Ensures that transactions are executed in isolation from one another.
+	- Durability: Ensures that once a transaction is committed, it will remain so, even in the event of a system failure.
+
+8. Normalization:
+	- The process of organizing data to minimize redundancy and dependency. Normalization involves dividing large tables into smaller ones and defining relationships between them.
+
+9. Popular Relational Database Management Systems (RDBMS):
+	- MySQL: Widely used open-source RDBMS.
+	- PostgreSQL: Open-source RDBMS known for its robustness and support for advanced features.
+	- Oracle Database: Commercial RDBMS known for its scalability and enterprise features.
+	- Microsoft SQL Server: Commercial RDBMS by Microsoft, known for its integration with other Microsoft products.
+	- SQLite: Lightweight, file-based RDBMS commonly used in mobile applications.
+
+--------------------------------------------------------
+
+B. JPA -- Hibernate
+
+The Jakarta Persistence API (JPA) is a specification for managing relational data in Java applications. JPA provides a standard approach to ORM (Object-Relational Mapping), which is a technique to convert data between incompatible type systems in object-oriented programming languages and relational databases.
+
+1. Entities:
+	- Entity Class: In JPA, an entity is a lightweight, persistent domain object. Entity classes are simple Java classes (POJOs) annotated with @Entity. Each entity instance represents a row in a database table.
+	- Primary Key: Each entity must have a primary key, which uniquely identifies it. This is annotated with @Id.
+	- Annotations: Annotations like @Entity, @Table, @Column, @Id, @GeneratedValue, etc., are used to map Java classes to database tables and their fields to columns.
+
+		- @Entity  -  Marks a class as an entity that should be mapped to a database table.
+
+			----
+			@Entity
+			public class Employee {
+				// ...
+			}
+			----
+
+		- @Table  -  Specifies the primary table for the annotated entity.
+
+			----
+			@Entity
+			@Table(name = "employees")
+			public class Employee {
+				// ...
+			}
+			----
+
+		- @Id  --  Specifies the primary key of an entity.
+		- @GeneratedValue  --  Specifies how the primary key should be generated.
+
+			----
+			@Id
+			@GeneratedValue(strategy = GenerationType.IDENTITY)
+			private Long id;
+			----
+
+		- @Column  --  Specifies the mapped column for a persistent property or field.
+
+			----
+			@Column(name = "employee_name", nullable = false)
+			private String name;
+			----
+
+		- @Embedded  --  Embeds a type within an entity.
+
+			----
+			@Embedded
+			private Address address;
+			----
+
+		- @Embeddable  --  Specifies a class whose instances are stored as an intrinsic part of an owning entity.
+
+			----
+			@Embeddable
+			public class Address {
+				private String street;
+				private String city;
+				// ...
+			}
+			----
+
+		- @Lob  --  Specifies that a persistent property or field should be persisted as a large object.
+
+			----
+			@Lob
+			private byte[] picture;
+			----
+
+		- @Transient  --  Specifies that a property or field is not persistent.
+
+			----
+			@Transient
+			private String temporaryData;
+			----
+
+		- @Version  --  Specifies the version field or property of an entity, used for optimistic locking.
+
+			----
+			@Version
+			private int version;
+			----
+
+		- @PrePersist  -- Specifies a method to be called before an entity is persisted.
+
+			----
+			@PrePersist
+			public void prePersist() {
+				// Code to execute before persisting
+			}
+			----
+
+		- @PostPersist, @PreUpdate, @PostUpdate, @PreRemove, @PostRemove, @PostLoad
+
+
+2. Entity Manager:
+	- The EntityManager is the primary interface for interacting with the persistence context. It is used to create, read, update, and delete operations.
+	- Persistence Context: A set of managed entity instances in which for any persistent entity identity there is a unique entity instance. The persistence context is managed by the EntityManager.
+
+3. Persistence Unit:
+	- A logical grouping of entities and configuration settings that define how these entities are managed and persisted to the database.
+	- Encapsulates all the metadata and settings required for entity management.
+
+4. JPA Provider:
+	- JPA is a specification, and it requires an implementation to be used. Common JPA providers include Hibernate, EclipseLink, and OpenJPA. These providers offer the actual implementations of the JPA interfaces.
+
+5. Queries:
+	- JPA provides a query language called JPQL (Java Persistence Query Language) for querying entities stored in the database. JPQL is similar to SQL but operates on the entity objects 	rather than database tables.
+	- Named Queries: Predefined queries that can be annotated in entity classes with @NamedQuery.
+
+6. Transactions:
+	- JPA supports transactions, which are used to group multiple operations into a single unit of work. Transactions can be managed by the application (via EntityTransaction) or by the container in an enterprise environment (via JTA - Java Transaction API).
+
+7. Callbacks and Listeners:
+	- JPA provides lifecycle callbacks and listeners to allow actions to be taken at specific points in an entity's lifecycle (e.g., @PrePersist, @PostPersist, @PreRemove, @PostRemove, @PreUpdate, @PostUpdate, @PostLoad).
+
+8. Benefits of JPA:
+	- Abstraction: Provides a high level of abstraction for database interactions, reducing the amount of boilerplate code.
+	- Portability: Being a specification, JPA allows switching between different ORM providers without changing the code.
+	- Productivity: Simplifies data access in Java applications, allowing developers to focus more on business logic rather than database plumbing.
+
+9. Limitations:
+	- Learning Curve: There can be a steep learning curve for developers new to ORM and JPA.
+	- Complex Queries: For complex queries, JPQL can sometimes be less powerful than native SQL, though native queries are also supported.
+	- Performance Overhead: The abstraction can introduce performance overhead, although this can often be mitigated with proper configuration and tuning.
+
+
+--------------------------------------------------------------------------------------------------------
+
+
+Ex 07
+	- Add db configs
+	- Add JPA annotations on Pizza classes, @Entity, @Table, @Column, @Id, @GeneratedValue(strategy = GenerationType.IDENTITY)
+	- Configure name column to be always required and have max length 50 chrs
+	- Add column for price
+	- Add column for timestamp addedOn (when the pizza was first added to the menu)
+
+Ex 08
+	- Create Repository for pizza with EntityManager
+	- implement save, delete, findAll and findByNameContains methods in repository
+	- change ItalianPizzaService impl to use new repository
+	- implement transactional method to save initial pizza data (must be called from outside of class)
+
+
+
+
+--09--
+Collections
+
+Mapping collections in JPA allows you to define relationships between entity classes where one entity contains a collection of other entities or basic types. This is commonly used to represent one-to-many or many-to-many relationships.
+
+A. Types of Collection Mappings
+
+1. One-to-Many Relationships:
+	- Represents a relationship where one entity (parent) has a collection of another entity (child).
+	- In a one-to-many relationship, the parent entity contains a collection of child entities. The child entity typically has a reference back to the parent entity.
+
+		----
+		public class Department{
+		...
+		@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+		private List<Employee> employees = new ArrayList<>();
+		....
+		}
+		public class Employee {
+		...
+		@ManyToOne
+		@JoinColumn(name = "department_id")
+		private Department department;
+		...
+		}
+		----
+
+2. Many-To-One
+	- Used to define a many-to-one relationship between two entities. This relationship means that many instances of an entity can be associated with a single instance of another entity. It is a common way to represent relationships like many employees belonging to one department, or many orders placed by one customer.
+
+
+3. Many-to-Many Relationships:
+	- Represents a relationship where many entities can relate to many other entities.
+	- In a many-to-many relationship, both entities have collections of each other. This relationship is typically represented using a join table.
+
+		----
+		public class Student {
+		...
+		@ManyToMany
+		@JoinTable(
+			name = "student_course",
+			joinColumns = @JoinColumn(name = "student_id"),
+			inverseJoinColumns = @JoinColumn(name = "course_id")
+		)
+		private Set<Course> courses = new HashSet<>();
+		...
+		}
+
+		public class Course {
+		...
+		@ManyToMany(mappedBy = "courses")
+		private Set<Student> students = new HashSet<>();
+		...
+		}
+		----
+
+4. Element Collection:
+	- Used to map collections of basic types or embeddable types.
+
+		----
+		public class User {
+		...
+		@ElementCollection
+		@CollectionTable(name = "user_phone_numbers", joinColumns = @JoinColumn(name = "user_id"))
+		@Column(name = "phone_number")
+		private List<String> phoneNumbers = new ArrayList<>();
+		...
+		}
+		----
+
+B. Cascade Types and Orphan Removal
+
+Cascade Types:
+	- Determine the operations that should be cascaded from the parent to the child entities. Common cascade types include PERSIST, MERGE, REMOVE, REFRESH, and DETACH.
+	- Orphan Removal: When set to true, the child entities are automatically removed when they are no longer referenced by the parent entity.
+
+		----
+		...
+		@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+		private List<Employee> employees = new ArrayList<>();
+		...
+		----
+
+C. Fetch Types
+
+EAGER:
+	- The associated entities are fetched immediately.
+LAZY:
+	- The associated entities are fetched when they are accessed.
+
+		----
+		...
+		@OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+		private List<Employee> employees = new ArrayList<>();
+		...
+		----
+
+D. Enums
+
+Enum Mapping Strategies
+	- Mapping enums in JPA involves converting Java enumeration types to a database-compatible format. This is typically done using the @Enumerated annotation. JPA provides two strategies for mapping enums: ORDINAL and STRING.
+
+1. ORDINAL:
+	- Stores the ordinal value (the position of the enum constant in its enum declaration, starting at 0).
+	- Pros: Efficient in terms of storage.
+	- Cons: Sensitive to changes in the enum declaration order. If the order of the enum constants changes, the data can become inconsistent.
+
+2. STRING:
+	- Stores the name of the enum constant.
+	- Pros: More robust and readable. Less prone to issues if the order of enum constants changes.
+	- Cons: Takes up more storage space compared to ORDINAL.
+
+		----
+		public class User {
+		...
+		@Enumerated(EnumType.STRING)
+		@Column(name = "status")
+		private Status status;
+		...
+		}
+		----
+		In this case, the status column in the user table will store the name of the Status enum constant as a string (e.g., "ACTIVE", "INACTIVE", "SUSPENDED").
+
+
+--------------------------------------------------------------------------------------------------------
+
+Ex 09
+	- ElementCollection mapping for allergens in Pizza
+	- ManyToMany relationship to Ingredients (id, name, price)
+
+Ex 10
+	- Enum of CurrencyValue
+	- embeddable for price
+	- Create entities for Customer and Order
+		Customer:
+		Name
+		can have many Orders
+
+		Order
+		Date
+		Price
+		Can contain many Pizzas
+
+		Create an endpoint to get all Orders
+
+--------------------------------------------------------------------------------------------------------
+
+

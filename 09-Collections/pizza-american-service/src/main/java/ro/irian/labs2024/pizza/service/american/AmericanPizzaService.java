@@ -45,4 +45,9 @@ public class AmericanPizzaService implements PizzaService {
                 .filter(pizza -> pizza.nameContains(nameContainsString))
                 .toList();
     }
+
+    @Override
+    public List<Pizza> getPizzaByIngredientName(String ingredientName) {
+        return List.of();
+    }
 }

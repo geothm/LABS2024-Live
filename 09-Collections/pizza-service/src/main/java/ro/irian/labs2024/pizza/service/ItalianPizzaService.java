@@ -69,4 +69,9 @@ public class ItalianPizzaService implements PizzaService {
     public List<Pizza> getPizzaByNameContains(String nameContainsString){
         return pizzaRepository.findNameContains(nameContainsString);
     }
+
+    @Override
+    public List<Pizza> getPizzaByIngredientName(String ingredientName) {
+        return pizzaRepository.findByIngredientName(ingredientName);
+    }
 }

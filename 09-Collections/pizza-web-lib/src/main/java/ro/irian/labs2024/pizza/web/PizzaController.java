@@ -53,4 +53,9 @@ public class PizzaController {
     public Pizza getFastPizzaById(@PathVariable Long pizzaId) {
         return fastPizzaService.getPizzaById(pizzaId);
     }
+
+    @GetMapping("/filter/ingredient")
+    public List<Pizza> getPizzaByIngredient(@RequestParam String ingredientName) {
+        return fastPizzaService.getPizzaByIngredientName(ingredientName);
+    }
 }

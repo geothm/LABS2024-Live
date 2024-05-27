@@ -13,4 +13,6 @@ public interface PizzaService {
     Pizza getPizzaById(Long id);
 
     List<Pizza> getPizzaByNameContains(String nameContainsString);
+
+    List<Pizza> getPizzaByIngredientName(String ingredientName) ;
 }

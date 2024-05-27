@@ -39,4 +39,14 @@ public class PizzaRepository {
                 .getResultList();
     }
 
+    public List<Pizza> findByIngredientName(String ingredient) {
+        return em.createQuery("""
+                        SELECT p FROM Pizza p
+                        JOIN p.ingredients i
+                        WHERE lower(i.name) LIKE lower(:ingredientName)
+                    """, Pizza.class)
+                .setParameter("ingredientName", ingredient)
+                .getResultList();
+    }
+
 }

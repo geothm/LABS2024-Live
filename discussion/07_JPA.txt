@@ -325,8 +325,8 @@ Ex 09
 	- ManyToMany relationship to Ingredients (id, name, price)
 
 Ex 10
-	- Enum of CurrencyValue
-	- embeddable for price
+	- create Enum for Currency(EUR,RON,USD)
+	- create embeddable for price
 	- Create entities for Customer and Order
 		Customer:
 		Name

@@ -9,7 +9,7 @@
 - Ex 17
 	- Save IngredientDTO
 	- get ingredient vos
-	- validate name has only letters and more than 1
+	- validate name not blank
 	- exception handler
 	- update ingredient
 	- https://www.baeldung.com/spring-boot-bean-validation
@@ -17,5 +17,6 @@
 
 - Ex 18
 	- Save new Customer
+	- validate name not blank
 	- Save new Order
 	- Validate sum of pizza prices is less or equal to order price
